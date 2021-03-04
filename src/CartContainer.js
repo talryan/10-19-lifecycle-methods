@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from "react-router-dom"
 
 class CartContainer extends React.Component{
 
@@ -28,7 +29,7 @@ class CartContainer extends React.Component{
        return this.props.cart.map(item => {
             return (
                 <div key={item.id}>
-                    <h4>{item.name} - ${item.price}</h4>
+                    <h4><Link to={`/items/${item.id}`}>{item.name}</Link> - ${item.price}</h4>
                 </div>
             )
         })

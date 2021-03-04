@@ -2,6 +2,12 @@ import React from 'react';
 import Header from './Header'
 import ItemsContainer from './ItemsContainer'
 import CartContainer from './CartContainer'
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import './App.css';
 
 class App extends React.Component{
@@ -33,7 +39,6 @@ class App extends React.Component{
   // LCM can ONLY be used in a class component 
   componentDidMount(){
     // typcially fetch requests happen in a componentDidMount
-    console.log("app mounted")
 
     fetch("http://localhost:3000/items")
     .then(res => res.json())
@@ -42,13 +47,31 @@ class App extends React.Component{
     })
   }
 
+  addToItems = (item) => {
+    this.setState((prevState) => {
+        return { items: [...prevState.items, item] };
+    });
+  };
+
+
 
 
   render(){
     return (
       <div className="App">
-        <Header changePage={this.changePage} />
-        {this.state.page === "items" ? <ItemsContainer  addToCart={this.addToCart} items={this.state.items} cart={this.state.cart}/> : <CartContainer cart={this.state.cart}/>}
+        <Router>
+          <Header />
+          <Switch>
+            <Route path="/items" component={(stuff) =>  this.state.items.length !== 0 ? 
+              <ItemsContainer stuff={stuff} addToItems={this.addToItems}  addToCart={this.addToCart} items={this.state.items} cart={this.state.cart}/>  
+              : <h1>...Loading</h1> 
+            }  />
+             
+            <Route path="/cart">
+              <CartContainer cart={this.state.cart}/>
+            </Route>
+          </Switch>
+        </Router>
       </div>
     );
   }

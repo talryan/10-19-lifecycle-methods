@@ -1,6 +1,12 @@
 import React from 'react'
 import Item from './Item'
 import FilterBar from './FilterBar'
+import ItemForm from './ItemForm'
+import ItemShow from './ItemShow'
+import {
+  Switch,
+  Route
+} from "react-router-dom";
 
 class ItemsContainer extends React.Component {
 
@@ -10,6 +16,7 @@ class ItemsContainer extends React.Component {
 
     componentDidMount(){
         console.log("Items Container mounted")
+        console.log(this.props)
       }
 
     filterItems = (e) => {
@@ -28,11 +35,23 @@ class ItemsContainer extends React.Component {
     render(){
         return(
             <div id="ItemsContainer">
-              <FilterBar filterItems={this.filterItems} />
-              { this.displayItems()}
+              <Switch>
+                <Route exact path="/items">
+                  <FilterBar filterItems={this.filterItems} />
+                  { this.displayItems()}
+                </Route>
+                <Route exact path="/items/new">
+                  <ItemForm addToItems={this.props.addToItems} />
+                </Route>
+                <Route path="/items/:id"  component={(routeInfo) => {
+                  const id = parseInt(routeInfo.match.params.id)
+                  const item = this.props.items.find(i => i.id === id)
+                  return !!item ? <ItemShow routeInfo={routeInfo} item={item}/> : <div>Not Found!</div>
+                }}/>
+              </Switch>
             </div>
         )
     }
 }
 
-export default ItemsContainer
+export default ItemsContainer 
