@@ -1,6 +1,7 @@
 import React from 'react'
 import Item from './Item'
 import FilterBar from './FilterBar'
+import {connect} from 'react-redux'
 
 class ItemsContainer extends React.Component {
 
@@ -22,7 +23,7 @@ class ItemsContainer extends React.Component {
 
       const itemsToDisplay = this.props.items.filter(i => i.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
 
-      return itemsToDisplay.map(item => <Item  key={item.id} cart={this.props.cart}  addToCart={this.props.addToCart} name={item.name} price={item.price} id={item.id} image1={item.image1} image2={item.image2} />) 
+      return itemsToDisplay.map(item => <Item  key={item.id} cart={this.props.cart}  item={item} name={item.name} price={item.price} id={item.id} image1={item.image1} image2={item.image2} />) 
     }
 
     render(){
@@ -35,4 +36,10 @@ class ItemsContainer extends React.Component {
     }
 }
 
-export default ItemsContainer
+const mapStateToProps = (state) => {
+
+  return state 
+
+}
+
+export default connect(mapStateToProps)(ItemsContainer)
